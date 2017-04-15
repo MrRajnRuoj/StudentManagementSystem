@@ -17,9 +17,5 @@ int main()
 	
 	backupDatabse(data);
 
-	// abcxyz
-
-	// dau xanh
-
 	return 0;
 }
