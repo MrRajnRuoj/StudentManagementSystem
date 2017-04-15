@@ -639,12 +639,6 @@ bool isCompleted()
 	string choose;
 
 	createForm(31, 17, 25, 5);
-	//for (int i = 0; i < 3; i++)
-	//	for (int j = 0; j < 23; j++)
-	//	{
-	//		gotoxy(32 + j, 19 + i);
-	//		cout << " ";
-	//	}
 	gotoxy(33, 18);
 	cout << "Do you want to update?";
 	gotoxy(34, 20);
