@@ -6,6 +6,12 @@
 #include "System.h"
 using namespace std;
 
+void dauxanh()
+{
+	//dauxanh1
+	//dauxanh2
+	//dauxanh3
+}
 int main()
 {
 	Data data;
