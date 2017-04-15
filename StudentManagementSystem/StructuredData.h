@@ -29,17 +29,15 @@ struct User
 	string password;
 	string classOfSt;
 };
-//struct course {
-//	string courseCode;
-//	string year;
-//	short int semester;
-//	string courseName;
-//	string lectureUserName;
-//	string startAt;
-//	string endAt;
-//	string from;
-//	string to;
-//};
+struct Student
+{
+	string ID;
+	string fullName;
+	float midtermScore;
+	float labScore;
+	float finalScore;
+	bool week[20];
+};
 struct Courses
 {
 	string code;
@@ -51,38 +49,14 @@ struct Courses
 	string end;
 	string from;
 	string to;
-};
-struct Score
-{
-	string courseCode;
-	int year;
-	short semester;
-	string stdID;
-	float midtermScore;
-	float labScore;
-	float finalScore;
-};
-struct Presence
-{
-	string presenceCode;
-	int year;
-	short semester;
-	string stdID;
-	//week ??
-};
-struct Schedule
-{
-	// ??
+	List<Student> lStd;
 };
 struct Data
 {
 	List<User> lUser;
 	List<Courses> lCourses;
-	List<Score> lScore;
-	List<Schedule> lSchedule;
-	List<Presence> lPresence;
+	
 };
-
 
 /*
 * Functions of Doubly Linked List for all data type

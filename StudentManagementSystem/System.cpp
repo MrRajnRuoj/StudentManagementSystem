@@ -138,12 +138,12 @@ std::string sha256(std::string input)
 
 void loadDatabase(Data &data)
 {
-	fstream dataUser, dataScores, dataCourses;
+	fstream dataUser, dataCourses;
 
 	// Load database user
 	dataUser.open(databaseUser, ios::in);
 	init(data.lUser);
-
+	//if(dataUser.good())					--> Waiting for Upgrade!
 	while (!dataUser.eof())
 	{
 		User cur;
@@ -160,30 +160,130 @@ void loadDatabase(Data &data)
 	}
 	dataUser.close();
 
-	// Load database score
+	// Load database course
+	dataCourses.open(databaseCourse, ios::in);
+	init(data.lCourses);
+
+	if (dataCourses.good())
+	{
+		while (!dataCourses.eof())
+		{
+			Courses course;
+			getline(dataCourses, course.code, ',');
+			dataCourses >> course.year;
+			dataCourses.ignore();
+			dataCourses >> course.semaster;
+			dataCourses.ignore();
+			getline(dataCourses, course.name, ',');
+			getline(dataCourses, course.lecturerUsername, ',');
+			getline(dataCourses, course.start, ',');
+			getline(dataCourses, course.end, ',');
+			getline(dataCourses, course.from, ',');
+			getline(dataCourses, course.to);
+			init(course.lStd);
+			while (1)
+			{
+				string checked;
+				Student std;
+
+				getline(dataCourses, checked, ',');
+				if (checked == "\\")
+				{
+					dataCourses.ignore();
+					break;
+				}
+				std.ID = checked;
+				getline(dataCourses, std.fullName, ',');
+				dataCourses >> std.midtermScore;
+				dataCourses.ignore();
+				dataCourses >> std.labScore;
+				dataCourses.ignore();
+				dataCourses >> std.finalScore;
+				dataCourses.ignore();
+				for (int i = 0; i < 20; i++)
+				{
+					dataCourses >> std.week[i];
+					dataCourses.ignore();
+				}
+				addTail(course.lStd, std);
+			}
+			addTail(data.lCourses, course);
+		}
+	}
+	//else cout << "File not available" << endl;		--> Waiting for Upgrade!
+
+	dataCourses.close();
 }
 void backupDatabse(Data &data)
 {
-	fstream dataUser;
+	fstream dataUser, dataCourse;
+	bool isFirst = true; // for format file :D
 
+	// Backup data user
 	dataUser.open(databaseUser, ios::out);
 
 	for (Node<User>* cur = data.lUser.pHead; cur != NULL; cur = cur->pNext)
 	{
+		if (isFirst == false)
+			dataUser << endl;
+		isFirst = false;
 		dataUser << cur->data.username << ",";
 		dataUser << cur->data.fullName << ",";
 		dataUser << cur->data.email << ",";
 		dataUser << cur->data.mobilePhone << ",";
 		dataUser << cur->data.type << ",";
 		dataUser << cur->data.password << ",";
-		dataUser << cur->data.classOfSt << endl;
+		dataUser << cur->data.classOfSt;
 	}
 
 	dataUser.close();
+
+	// Backup data course
+
+	dataCourse.open(databaseCourse, ios::out);
+
+	isFirst = true;
+	Node<Courses>* curCourses = data.lCourses.pHead;
+	while (curCourses != NULL)
+	{
+		if (isFirst == false)
+			dataCourse << endl;
+		isFirst = false;
+		dataCourse << curCourses->data.code;
+		dataCourse << "," << curCourses->data.year;
+		dataCourse << "," << curCourses->data.semaster;
+		dataCourse << "," << curCourses->data.name;
+		dataCourse << "," << curCourses->data.lecturerUsername;
+		dataCourse << "," << curCourses->data.start;
+		dataCourse << "," << curCourses->data.end;
+		dataCourse << "," << curCourses->data.from;
+		dataCourse << "," << curCourses->data.to << endl;
+		Node<Student>* curStd = curCourses->data.lStd.pHead;
+		bool isFirst2 = true;
+		while (curStd != NULL)
+		{
+			if (isFirst2 == false)
+				dataCourse << endl;
+			isFirst2 = false;
+			dataCourse << curStd->data.ID << "," << curStd->data.fullName << ",";
+			dataCourse << curStd->data.midtermScore << ",";
+			dataCourse << curStd->data.labScore << ",";
+			dataCourse << curStd->data.finalScore;
+			for (int i = 0; i < 20; i++)
+				dataCourse << "," << (int)curStd->data.week[i];
+			curStd = curStd->pNext;
+		}
+		dataCourse << endl << "\\,";
+		curCourses = curCourses->pNext;
+	}
+	dataCourse.close();
+
 	RemoveList(data.lUser);
+	RemoveList(data.lCourses);
 }
 void clearBuffer()
 {
+	// hasn't been used yet
 	int c;
 	do
 	{

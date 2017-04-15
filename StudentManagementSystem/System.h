@@ -94,7 +94,6 @@ std::string sha256(std::string input);
 /*					Function in StudentManagementSystem				*/
 
 #define databaseUser   "DatabaseUser.csv"
-#define databaseScore  "DatabaseScore.csv"
 #define databaseCourse "DatabaseCourse.csv"
 
 void loadDatabase(Data &data);
