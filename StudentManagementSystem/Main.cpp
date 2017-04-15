@@ -6,6 +6,14 @@
 #include "System.h"
 using namespace std;
 
+
+void test()
+{
+	//test1
+	//test2
+	//test3
+	//test4
+  {
 void dauxanh()
 {
 	//dauxanh1
@@ -22,6 +30,10 @@ int main()
 	loginUI(data);
 	
 	backupDatabse(data);
+
+	// abcxyz
+
 	// dau xanh
+
 	return 0;
 }
