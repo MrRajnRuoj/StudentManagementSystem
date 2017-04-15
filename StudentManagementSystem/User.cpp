@@ -170,8 +170,6 @@ int menuLecturer(Data &data, Node<User> *user)
 		{
 		case 1:
 			// install Import scores function here!
-			modifyUserInfo(user);
-			break;
 		case 2:
 			return logoutUI();
 		case 3:
@@ -357,7 +355,7 @@ Node<User>* isTruePassword(string username, string password, List<User> listUser
 }
 
 // Function for modifying user information
-int modifyUserInfo(Node<User> *user) //chua test
+int modifyUserInfo(Node<User> *user)
 {
 	User newInfo;
 
@@ -501,13 +499,34 @@ int modifyUserInfo(Node<User> *user) //chua test
 			break;
 	}
 
-	bool checked = isCompleted();
-	cout << "Done" << endl;
-	//createForm()
+	if (isCompleted())
+	{
+		if (newInfo.password.size() != 0)
+			user->data.password = newInfo.password;
+		if (newInfo.email.size() != 0)
+			user->data.email = newInfo.email;
+		if (newInfo.mobilePhone.size() != 0)
+			user->data.mobilePhone = newInfo.mobilePhone;
+	}
+
+	// remove completed form
+	for (int i = 0; i <= 5; i++)
+		for (int j = 0; j <= 25; j++)
+		{
+			gotoxy(31 + j, 17 + i);
+			cout << " ";
+		}
+	gotoxy(34, 18);
+	textcolor(10);
+	cout << "Information Updated!";
+	textcolor(15);
+	Sleep(1000);
+
 	return -1;
 }
 bool changePassword(string &password)
 {
+retry:
 	string pass1 = "", pass2 = "";
 
 	while (1)
@@ -535,7 +554,7 @@ bool changePassword(string &password)
 					gotoxy(60, 13);
 					for (int i = 0; i < 20; i++) cout << " ";
 					return false;
-				}	
+				}
 				else
 					continue;
 			if (ch == '\b')
@@ -599,26 +618,40 @@ bool changePassword(string &password)
 		password = sha256(pass1);
 		return true;
 	}
+
+	// else
+	gotoxy(60, 14);
+	textcolor(12);
+	cout << "Password not match!";
+	textcolor(15);
+	Sleep(1000);
+	gotoxy(60, 14);
+	for (int i = 0; i < 20; i++) cout << " ";
+	gotoxy(34, 13);
+	for (int i = 0; i < pass1.size(); i++) cout << " ";
+	gotoxy(34, 14);
+	for (int i = 0; i < pass2.size(); i++) cout << " ";
+	goto retry;
 	return false;
 }
 bool isCompleted()
 {
 	string choose;
 
-	createForm(31, 18, 27, 5);
-	for (int i = 0; i < 3; i++)
-		for (int j = 0; j < 25; j++)
-		{
-			gotoxy(32 + j, 19 + i);
-			cout << " ";
-		}
-	gotoxy(33, 19);
+	createForm(31, 17, 25, 5);
+	//for (int i = 0; i < 3; i++)
+	//	for (int j = 0; j < 23; j++)
+	//	{
+	//		gotoxy(32 + j, 19 + i);
+	//		cout << " ";
+	//	}
+	gotoxy(33, 18);
 	cout << "Do you want to update?";
-	gotoxy(34, 21);
+	gotoxy(34, 20);
 	cout << "<1> Yes";
-	gotoxy(46, 21);
+	gotoxy(46, 20);
 	cout << "<2> No";
-	gotoxy(32, 22);
+	gotoxy(32, 21);
 	cout << "Your choose: ";
 	while (1)
 	{
@@ -635,9 +668,9 @@ bool isCompleted()
 					continue;
 				else
 				{
-					gotoxy(45, 15);
+					gotoxy(45, 21);
 					cout << " ";
-					gotoxy(45, 15);
+					gotoxy(45, 21);
 					choose.erase(0, 1);
 				}
 			else
